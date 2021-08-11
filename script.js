@@ -85,14 +85,14 @@ paypal.Buttons({
     }
 }).render('#paypal-button-container');
 
-function firebaseLogin(name, donation, mail, userID) {
+function firebaseLogin(name, donation, mail, PPuserID) {
     let fbUser = "";
-    firebase.auth().signInWithEmailAndPassword(mail, userID)
+    firebase.auth().signInWithEmailAndPassword(mail, PPuserID)
         .then((userCredential) => {
         })
         .catch((e) => {
             console.log(e);
-            firebase.auth().createUserWithEmailAndPassword(mail, userID)
+            firebase.auth().createUserWithEmailAndPassword(mail, PPuserID)
                 .then((userCredential) => {
                 })
                 .catch((e) => {
@@ -105,14 +105,15 @@ function firebaseLogin(name, donation, mail, userID) {
         if (user) {
             // https://firebase.google.com/docs/reference/js/firebase.User
             fbUser = user.uid;
-            changeFirebase(name, donation, mail, fbUser)
+            console.log(fbUser);
+            changeFirebase(name, donation, mail, fbUser, PPuserID);
         } else {
 
         }
     });
 }
 
-function changeFirebase(name, donation, mail, userID) {
+function changeFirebase(name, donation, mail, userID, PPuserID) {
     let date = Date.now();
     let addDonation = { amount: donation, date: date };
     let userData = [];
@@ -134,8 +135,9 @@ function changeFirebase(name, donation, mail, userID) {
                     donated: donation,
                     name: name,
                     mail: mail,
-                    userID: userID,
-                    lbID: lbID
+                    fbUserID: userID,
+                    lbID: lbID,
+                    PPuserID: PPuserID
                 };
                 donatedTotal = donation;
                 updates["uniqueID/lbID"] = lbID;
@@ -149,7 +151,6 @@ function changeFirebase(name, donation, mail, userID) {
             userData = obj.val();
             userData.donated = userData.donated + donation;
             userData.name = name;
-            userData.mail = mail;
             userData.allDonations.unshift(addDonation);
             donatedTotal = userData.donated;
             lbID = userData.lbID;
