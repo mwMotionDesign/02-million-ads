@@ -88,8 +88,8 @@ paypal.Buttons({
 function firebaseLogin(name, donation, mail, userID) {
     firebase.auth().createUserWithEmailAndPassword(mail, userID)
         .then((userCredential) => {
-            var user = userCredential.user;
-            changeFirebase(lbName, donAmount, lbMail, PPuserID);
+            var fbUser = userCredential.user;
+            changeFirebase(name, donation, mail, userID);
         })
         .catch((e) => {
             alert(e);

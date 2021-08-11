@@ -1,1 +1,1 @@
-Script File for jsdelvr CDN Hosting to Million-Ads.com
+Script File for CDN Hosting to Million-Ads.com
