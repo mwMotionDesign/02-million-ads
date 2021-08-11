@@ -86,14 +86,30 @@ paypal.Buttons({
 }).render('#paypal-button-container');
 
 function firebaseLogin(name, donation, mail, userID) {
-    firebase.auth().createUserWithEmailAndPassword(mail, userID)
+    let fbUser = "";
+    firebase.auth().signInWithEmailAndPassword(mail, userID)
         .then((userCredential) => {
-            var fbUser = userCredential.user;
-            changeFirebase(name, donation, mail, userID);
         })
         .catch((e) => {
-            alert(e);
+            console.log(e);
+            firebase.auth().createUserWithEmailAndPassword(mail, userID)
+                .then((userCredential) => {
+                })
+                .catch((e) => {
+                    console.log(e);
+                });
         });
+
+
+    firebase.auth().onAuthStateChanged((user) => {
+        if (user) {
+            // https://firebase.google.com/docs/reference/js/firebase.User
+            fbUserID = user.uid;
+            changeFirebase(name, donation, mail, fbUserID)
+        } else {
+
+        }
+    });
 }
 
 function changeFirebase(name, donation, mail, userID) {
