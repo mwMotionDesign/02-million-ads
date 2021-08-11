@@ -104,8 +104,8 @@ function firebaseLogin(name, donation, mail, userID) {
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
             // https://firebase.google.com/docs/reference/js/firebase.User
-            fbUserID = user.uid;
-            changeFirebase(name, donation, mail, fbUserID)
+            fbUser = user.uid;
+            changeFirebase(name, donation, mail, fbUser)
         } else {
 
         }
