@@ -90,7 +90,7 @@ function firebaseLogin(name, donation, mail, PPuserID) {
         .then((userCredential) => {
         })
         .catch((e) => {
-            alert(e);
+            console.log("User doesn't exist: Create new User");
             firebase.auth().createUserWithEmailAndPassword(mail, PPuserID)
                 .then((userCredential) => {
                 })
