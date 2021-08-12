@@ -12,6 +12,9 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
+
+const nOfEntries = 5;
+
 const buttonOnce = document.getElementById("buttonDonate");
 const PaymentOverlay = document.getElementById("paymentOverlay");
 const PaymentClickField = document.getElementById("paymentClickField");
@@ -47,11 +50,11 @@ let updates = {};
 
 paypal.Buttons({
     createOrder: function (data, actions) {
-        donAmount = donAmountField.value.toString();
+        donAmount = parseFloat(donAmountField.value);
         return actions.order.create({
             purchase_units: [{
                 amount: {
-                    value: donAmount
+                    value: donAmount.toString()
                 }
             }]
         });
@@ -61,7 +64,6 @@ paypal.Buttons({
             lbName = lbNameField.value;
             lbMail = details.payer.email_address;
             PPuserID = details.payer.payer_id;
-            donAmount = parseFloat(donAmount)
             firebaseLogin(lbName, donAmount, lbMail, PPuserID);
             donAmountField.value = "";
             lbNameField.value = "";
@@ -88,11 +90,13 @@ function firebaseLogin(name, donation, mail, PPuserID) {
     let fbUser = "";
     firebase.auth().signInWithEmailAndPassword(mail, PPuserID)
         .then((userCredential) => {
+            console.log("User signed in");
         })
         .catch((e) => {
-            console.log("User doesn't exist: Create new User");
+            console.log("User doesn't exist!");
             firebase.auth().createUserWithEmailAndPassword(mail, PPuserID)
                 .then((userCredential) => {
+                    console.log("Created new User nad sign in");
                 })
                 .catch((e) => {
                     alert(e);
@@ -168,7 +172,7 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
         else {
             arrLatest = obj.val();
             arrLatest.unshift({ name: name, donation: donation });
-            if (arrLatest.length > 5) {
+            if (arrLatest.length > nOfEntries) {
                 arrLatest.pop();
             }
         }
@@ -181,7 +185,7 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
                 arrAllTime = obj.val();
                 arrAllTime.unshift({ name: name, donation: donation });
                 arrAllTime.sort(compareDonation);
-                if (arrAllTime.length > 5) {
+                if (arrAllTime.length > nOfEntries) {
                     arrAllTime.pop();
                 }
             }
@@ -213,7 +217,7 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
                         userInList = false;
                     }
                     arrDonators.sort(compareDonated);
-                    if (arrDonators.length > 5) {
+                    if (arrDonators.length > nOfEntries) {
                         arrDonators.pop();
                     }
                 }
@@ -223,6 +227,7 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
                 db.ref().update(updates);
                 changeInnerHTML();
                 firebase.auth().signOut().then(() => {
+                    console.log("User logged out!");
                 }).catch((e) => {
                     alert(e);
                 });
