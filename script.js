@@ -96,7 +96,7 @@ function firebaseLogin(name, donation, mail, PPuserID) {
             console.log("User doesn't exist!");
             firebase.auth().createUserWithEmailAndPassword(mail, PPuserID)
                 .then((userCredential) => {
-                    console.log("Created new User nad sign in");
+                    console.log("Created new User and signed in");
                 })
                 .catch((e) => {
                     alert(e);
@@ -150,12 +150,15 @@ function changeFirebase(name, donation, mail, userID, PPuserID) {
         }
         else {
             userData = obj.val();
+            console.log(userData);
             userData.donated = userData.donated + donation;
             userData.name = name;
             userData.allDonations.unshift(addDonation);
             donatedTotal = userData.donated;
             lbID = userData.lbID;
             updates["users/" + userID] = userData;
+            console.log(userData);
+            console.log(name, donation, donatedTotal, lbID);
             changeLeaderboards(name, donation, donatedTotal, lbID);
         }
     }, (e) => {
