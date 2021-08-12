@@ -175,7 +175,7 @@ function changeFirebase(name, donation, mail, userID, PPuserID) {
 function changeLeaderboards(name, donation, donatedTotal, lbID) {
     db.ref("leaderBoard/latest/").once("value").then((obj) => {
         arrLatest = [];
-        console.log("11 - donations Latest: " + donations);
+        console.log("11 - donation Latest: " + donation);
         if (obj.val() == null) {
             arrLatest.unshift({ name: name, donation: donation });
         }
@@ -188,7 +188,7 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
         }
         db.ref("leaderBoard/alltime/").once("value").then((obj) => {
             arrAllTime = [];
-            console.log("12 - donations alltime: " + donations);
+            console.log("12 - donation alltime: " + donation);
             if (obj.val() == null) {
                 arrAllTime.unshift({ name: name, donation: donation });
             }
@@ -207,7 +207,7 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
                     name: name
                 };
                 let userInList = false;
-                console.log("13 - donations Donators: " + donations);
+                console.log("13 - donation Donators: " + donation);
                 if (obj.val() == null) {
                     arrDonators.unshift(arrUser);
                 }
