@@ -92,36 +92,28 @@ function firebaseLogin(name, donation, mail, PPuserID) {
     firebase.auth().signInWithEmailAndPassword(mail, PPuserID)
         .then((userCredential) => {
             console.log("1 - User signed in");
+            fbUser = userCredential.uid;
+            firebaseAfterLogin(name, donation, mail, fbUser, PPuserID);
         })
         .catch((e) => {
             console.log("2 - User doesn't exist!");
             firebase.auth().createUserWithEmailAndPassword(mail, PPuserID)
                 .then((userCredential) => {
                     console.log("3 - Created new User and signed in");
+                    fbUser = userCredential.uid;
+                    firebaseAfterLogin(name, donation, mail, fbUser, PPuserID);
                 })
                 .catch((e) => {
                     alert(e);
                 });
         });
+}
 
-
-    firebase.auth().onAuthStateChanged((user) => {
-        if (user) {
-            console.log("4 - User Statechange detected");
-            if (loggedIn == false) {
-                console.log("4b - Running Script (loggedIn false)");
-                fbUser = user.uid;
-                console.log("5 - name, donation, mail, fbUser, PPuserID - From Auth to changeFirebase()");
-                console.log("6 - " + name, donation, mail, fbUser, PPuserID);
-                changeFirebase(name, donation, mail, fbUser, PPuserID);
-                console.log("loggedIn to true");
-                loggedIn = true;
-            }
-        } else {
-            console.log("loggedIn to false");
-            loggedIn = false;
-        }
-    });
+function firebaseAfterLogin(name, donation, mail, fbUser, PPuserID) {
+    console.log("4 - Running Script (loggedIn false)");
+    console.log("5 - name, donation, mail, fbUser, PPuserID - From Auth to changeFirebase()");
+    console.log("6 - " + name, donation, mail, fbUser, PPuserID);
+    changeFirebase(name, donation, mail, fbUser, PPuserID);
 }
 
 function changeFirebase(name, donation, mail, userID, PPuserID) {
