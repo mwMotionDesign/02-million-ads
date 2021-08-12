@@ -45,6 +45,7 @@ let arrUser = [];
 const db = firebase.database();
 let lbMail = "";
 let ppUserID = "";
+let loggedIn = false;
 
 let updates = {};
 
@@ -106,13 +107,19 @@ function firebaseLogin(name, donation, mail, PPuserID) {
 
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-            console.log("4 - User Statechange detected - Running Script");
-            fbUser = user.uid;
-            console.log("5 - name, donation, mail, fbUser, PPuserID - From Auth to changeFirebase()");
-            console.log("6 - " + name, donation, mail, fbUser, PPuserID);
-            changeFirebase(name, donation, mail, fbUser, PPuserID);
+            console.log("4 - User Statechange detected");
+            if (loggedIn == false) {
+                console.log("4b - Running Script (loggedIn false)");
+                fbUser = user.uid;
+                console.log("5 - name, donation, mail, fbUser, PPuserID - From Auth to changeFirebase()");
+                console.log("6 - " + name, donation, mail, fbUser, PPuserID);
+                changeFirebase(name, donation, mail, fbUser, PPuserID);
+                console.log("loggedIn to true");
+                loggedIn = true;
+            }
         } else {
-
+            console.log("loggedIn to false");
+            loggedIn = false;
         }
     });
 }
