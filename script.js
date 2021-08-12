@@ -58,7 +58,6 @@ paypal.Buttons({
     },
     onApprove: function (data, actions) {
         return actions.order.capture().then(function (details) {
-            console.log(details);
             lbName = lbNameField.value;
             lbMail = details.payer.email_address;
             PPuserID = details.payer.payer_id;
@@ -91,21 +90,19 @@ function firebaseLogin(name, donation, mail, PPuserID) {
         .then((userCredential) => {
         })
         .catch((e) => {
-            console.log(e);
+            alert(e);
             firebase.auth().createUserWithEmailAndPassword(mail, PPuserID)
                 .then((userCredential) => {
                 })
                 .catch((e) => {
-                    console.log(e);
+                    alert(e);
                 });
         });
 
 
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
-            // https://firebase.google.com/docs/reference/js/firebase.User
             fbUser = user.uid;
-            console.log(fbUser);
             changeFirebase(name, donation, mail, fbUser, PPuserID);
         } else {
 
@@ -225,6 +222,10 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
                 updates["leaderBoard/Donators"] = arrDonators;
                 db.ref().update(updates);
                 changeInnerHTML();
+                firebase.auth().signOut().then(() => {
+                }).catch((e) => {
+                    alert(e);
+                });
             }, (e) => {
                 alert(e);
             });
