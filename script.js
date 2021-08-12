@@ -92,7 +92,7 @@ function firebaseLogin(name, donation, mail, PPuserID) {
     firebase.auth().signInWithEmailAndPassword(mail, PPuserID)
         .then((userCredential) => {
             console.log("1 - User signed in");
-            fbUser = userCredential.uid;
+            fbUser = userCredential.user.uid;
             firebaseAfterLogin(name, donation, mail, fbUser, PPuserID);
         })
         .catch((e) => {
@@ -100,7 +100,7 @@ function firebaseLogin(name, donation, mail, PPuserID) {
             firebase.auth().createUserWithEmailAndPassword(mail, PPuserID)
                 .then((userCredential) => {
                     console.log("3 - Created new User and signed in");
-                    fbUser = userCredential.uid;
+                    fbUser = userCredential.user.uid;
                     firebaseAfterLogin(name, donation, mail, fbUser, PPuserID);
                 })
                 .catch((e) => {
