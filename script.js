@@ -90,13 +90,13 @@ function firebaseLogin(name, donation, mail, PPuserID) {
     let fbUser = "";
     firebase.auth().signInWithEmailAndPassword(mail, PPuserID)
         .then((userCredential) => {
-            console.log("User signed in");
+            console.log("1 - User signed in");
         })
         .catch((e) => {
-            console.log("User doesn't exist!");
+            console.log("2 - User doesn't exist!");
             firebase.auth().createUserWithEmailAndPassword(mail, PPuserID)
                 .then((userCredential) => {
-                    console.log("Created new User and signed in");
+                    console.log("3 - Created new User and signed in");
                 })
                 .catch((e) => {
                     alert(e);
@@ -106,7 +106,10 @@ function firebaseLogin(name, donation, mail, PPuserID) {
 
     firebase.auth().onAuthStateChanged((user) => {
         if (user) {
+            console.log("4 - User Statechange detected - Running Script");
             fbUser = user.uid;
+            console.log("5 - name, donation, mail, fbUser, PPuserID - From Auth to changeFirebase()");
+            console.log("6 - " + name, donation, mail, fbUser, PPuserID);
             changeFirebase(name, donation, mail, fbUser, PPuserID);
         } else {
 
@@ -150,6 +153,7 @@ function changeFirebase(name, donation, mail, userID, PPuserID) {
         }
         else {
             userData = obj.val();
+            console.log("7 - UserData read from Firebase(User already exists):");
             console.log(userData);
             userData.donated = userData.donated + donation;
             userData.name = name;
@@ -157,8 +161,10 @@ function changeFirebase(name, donation, mail, userID, PPuserID) {
             donatedTotal = userData.donated;
             lbID = userData.lbID;
             updates["users/" + userID] = userData;
+            console.log("8 - UserData + added variables:");
             console.log(userData);
-            console.log(name, donation, donatedTotal, lbID);
+            console.log("9 - name, donation, donatedTotal, lbID from changeFBUser to changeLeaderboards()");
+            console.log("10 - " + name, donation, donatedTotal, lbID);
             changeLeaderboards(name, donation, donatedTotal, lbID);
         }
     }, (e) => {
@@ -169,6 +175,7 @@ function changeFirebase(name, donation, mail, userID, PPuserID) {
 function changeLeaderboards(name, donation, donatedTotal, lbID) {
     db.ref("leaderBoard/latest/").once("value").then((obj) => {
         arrLatest = [];
+        console.log("11 - donations Latest: " + donations);
         if (obj.val() == null) {
             arrLatest.unshift({ name: name, donation: donation });
         }
@@ -181,6 +188,7 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
         }
         db.ref("leaderBoard/alltime/").once("value").then((obj) => {
             arrAllTime = [];
+            console.log("12 - donations alltime: " + donations);
             if (obj.val() == null) {
                 arrAllTime.unshift({ name: name, donation: donation });
             }
@@ -199,6 +207,7 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
                     name: name
                 };
                 let userInList = false;
+                console.log("13 - donations Donators: " + donations);
                 if (obj.val() == null) {
                     arrDonators.unshift(arrUser);
                 }
@@ -230,7 +239,7 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
                 db.ref().update(updates);
                 changeInnerHTML();
                 firebase.auth().signOut().then(() => {
-                    console.log("User logged out!");
+                    console.log("14 - User logged out!");
                 }).catch((e) => {
                     alert(e);
                 });
