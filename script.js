@@ -1,4 +1,4 @@
-// Version 18
+// Version 19
 
 const firebaseConfig = {
     apiKey: "AIzaSyAlyTC44ZMeLmbmJzorOAwSl1eBNACPLwY",
@@ -15,8 +15,9 @@ firebase.initializeApp(firebaseConfig);
 firebase.analytics();
 
 
+//variables to Change
 const nOfEntriesSaved = 20;
-const nOfEntriesShown = 10;
+
 
 const buttonOnce = document.getElementById("buttonDonate");
 const PaymentOverlay = document.getElementById("paymentOverlay");
@@ -268,43 +269,41 @@ function loadLeaderboards() {
             arrLatest = [];
             arrLatest = obj.val();
         }
-        changeInnerHTML();
+        db.ref("leaderBoard/alltime").once("value").then((obj) => {
+            if (obj.val() == null) {
+                arrAllTime = [];
+            }
+            else {
+                arrAllTime = [];
+                arrAllTime = obj.val();
+            }
+            db.ref("leaderBoard/Donators").once("value").then((obj) => {
+                if (obj.val() == null) {
+                    arrDonators = [];
+                }
+                else {
+                    arrDonators = [];
+                    arrDonators = obj.val();
+                }
+                changeInnerHTML();
+            }, (err) => {
+                alert(err);
+            });
+        }, (err) => {
+            alert(err);
+        });
     }, (err) => {
         alert(err);
     });
 
-    db.ref("leaderBoard/alltime").once("value").then((obj) => {
-        if (obj.val() == null) {
-            arrAllTime = [];
-        }
-        else {
-            arrAllTime = [];
-            arrAllTime = obj.val();
-        }
-        changeInnerHTML();
-    }, (err) => {
-        alert(err);
-    });
 
-    db.ref("leaderBoard/Donators").once("value").then((obj) => {
-        if (obj.val() == null) {
-            arrDonators = [];
-        }
-        else {
-            arrDonators = [];
-            arrDonators = obj.val();
-        }
-        changeInnerHTML();
-    }, (err) => {
-        alert(err);
-    });
 }
 
 function changeInnerHTML() {
     let changeLatestNames = document.getElementsByClassName("lbnamelatest");
     let changeLatestDonations = document.getElementsByClassName("lbdonationlatest");
 
-    for (let i = 0; i < arrLatest.length && i < nOfEntriesShown; i++) {
+    for (let i = 0; i < arrLatest.length && i < changeLatestNames.length; i++) {
         changeLatestNames[i].innerHTML = arrLatest[i].name;
         changeLatestDonations[i].innerHTML = arrLatest[i].donation;
     }
@@ -312,7 +311,7 @@ function changeInnerHTML() {
     let changeAllTimeNames = document.getElementsByClassName("lbnamealltime");
     let changeAllTimeDonations = document.getElementsByClassName("lbdonationalltime");
 
-    for (let i = 0; i < arrAllTime.length && i < nOfEntriesShown; i++) {
+    for (let i = 0; i < arrAllTime.length && i < changeAllTimeNames.length; i++) {
         changeAllTimeNames[i].innerHTML = arrAllTime[i].name;
         changeAllTimeDonations[i].innerHTML = arrAllTime[i].donation;
     }
@@ -320,11 +319,10 @@ function changeInnerHTML() {
     let changeDonatorsNames = document.getElementsByClassName("lbnamedonators");
     let changeDonatorsDonations = document.getElementsByClassName("lbdonationdonators");
 
-    for (let i = 0; i < arrDonators.length && i < nOfEntriesShown; i++) {
+    for (let i = 0; i < arrDonators.length && i < changeDonatorsNames.length; i++) {
         changeDonatorsNames[i].innerHTML = arrDonators[i].name;
         changeDonatorsDonations[i].innerHTML = arrDonators[i].donated;
     }
-    console.log(changeLatestNames.length, changeAllTimeNames.length, changeDonatorsNames.length);
 }
 
 function allChecksClicked() {
