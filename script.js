@@ -248,10 +248,10 @@ function changeStatistics(donation) {
             statsNumOfDonations = 1;
         }
         else {
-            statsdonationsTotal = obj.DonationsTotal.val()
+            statsdonationsTotal = obj["DonationsTotal"];
             statsdonationsTotal = statsdonationsTotal + donation;
 
-            statsNumOfDonations = obj.NumOfDonations.val();
+            statsNumOfDonations = obj.["NumOfDonations"];
             statsNumOfDonations++;
         }
 
