@@ -22,6 +22,7 @@ const nOfEntriesSaved = 20;
 const buttonOnce = document.getElementById("buttonDonate");
 const PaymentOverlay = document.getElementById("paymentOverlay");
 const PaymentClickField = document.getElementById("paymentClickField");
+const reloadLB = document.getElementById("reloadLB");
 
 const donAmountField = document.getElementById("DonationAmount");
 let donAmount = 0;
@@ -363,6 +364,10 @@ function allChecksClicked() {
 
     PaymentErrorMessage.addEventListener("click", event => {
         PaymentErrorMessage.style.display = "none";
+    });
+
+    reloadLB.addEventListener("click", event => {
+        loadLeaderboards();
     });
 
     loadLeaderboards();
