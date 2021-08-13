@@ -248,6 +248,9 @@ function changeStatistics(donation) {
             statsNumOfDonations = 1;
         }
         else {
+            console.log(obj);
+            console.log(obj.NumOfDonations);
+            console.log(obj["DonationsTotal"]);
             statsdonationsTotal = obj["DonationsTotal"];
             statsdonationsTotal = statsdonationsTotal + donation;
 
