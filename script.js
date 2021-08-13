@@ -243,18 +243,19 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
 
 function changeStatistics(donation) {
     db.ref("statistics").once("value").then((obj) => {
+        let statisticsObj = obj.val();
         if (obj.val() == null) {
             statsdonationsTotal = donation;
             statsNumOfDonations = 1;
         }
         else {
-            console.log(obj);
-            console.log(obj.NumOfDonations);
-            console.log(obj["DonationsTotal"]);
-            statsdonationsTotal = obj["DonationsTotal"];
+            console.log(statisticsObj);
+            console.log(statisticsObj.NumOfDonations);
+            console.log(statisticsObj["DonationsTotal"]);
+            statsdonationsTotal = statisticsObj.DonationsTotal;
             statsdonationsTotal = statsdonationsTotal + donation;
 
-            statsNumOfDonations = obj["NumOfDonations"];
+            statsNumOfDonations = statisticsObj.NumOfDonations;
             statsNumOfDonations++;
         }
 
