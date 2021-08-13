@@ -23,7 +23,7 @@ const buttonOnce = document.getElementById("buttonDonate");
 const PaymentOverlay = document.getElementById("paymentOverlay");
 const PaymentClickField = document.getElementById("paymentClickField");
 const reloadLB = document.getElementById("reloadLB");
-const reloadLB = document.getElementById("reloadText");
+const reloadText = document.getElementById("reloadText");
 
 const donAmountField = document.getElementById("DonationAmount");
 let donAmount = 0;
