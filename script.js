@@ -229,7 +229,7 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
                 updates['leaderBoard/alltime'] = arrAllTime;
                 updates["leaderBoard/Donators"] = arrDonators;
                 changeInnerHTML();
-                changeStatistics();
+                changeStatistics(donation);
             }, (e) => {
                 alert(e);
             });
@@ -244,13 +244,10 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
 function changeStatistics(donation) {
     db.ref("statistics").once("value").then((obj) => {
         if (obj.val() == null) {
-            console.log("if");
             statsdonationsTotal = donation;
             statsNumOfDonations = 1;
         }
         else {
-            console.log("else");
-            console.log(obj);
             statsdonationsTotal = obj.DonationsTotal.val()
             statsdonationsTotal = statsdonationsTotal + donation;
 
