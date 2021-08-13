@@ -57,6 +57,7 @@ let statsNumOfDonations = 0;
 
 let updates = {};
 
+
 paypal.Buttons({
     createOrder: function (data, actions) {
         donAmount = parseFloat(donAmountField.value);
