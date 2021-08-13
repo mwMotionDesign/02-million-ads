@@ -168,7 +168,7 @@ function changeFirebase(name, donation, mail, userID, PPuserID) {
 }
 
 function changeLeaderboards(name, donation, donatedTotal, lbID) {
-    db.ref("leaderBoard/latest/").once("value").then((obj) => {
+    db.ref("leaderBoard/latest").once("value").then((obj) => {
         arrLatest = [];
         if (obj.val() == null) {
             arrLatest.unshift({ name: name, donation: donation });
@@ -180,7 +180,7 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
                 arrLatest.pop();
             }
         }
-        db.ref("leaderBoard/alltime/").once("value").then((obj) => {
+        db.ref("leaderBoard/alltime").once("value").then((obj) => {
             arrAllTime = [];
             if (obj.val() == null) {
                 arrAllTime.unshift({ name: name, donation: donation });
@@ -225,8 +225,8 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
                         arrDonators.pop();
                     }
                 }
-                updates['leaderBoard/latest/'] = arrLatest;
-                updates['leaderBoard/alltime/'] = arrAllTime;
+                updates['leaderBoard/latest'] = arrLatest;
+                updates['leaderBoard/alltime'] = arrAllTime;
                 updates["leaderBoard/Donators"] = arrDonators;
                 changeInnerHTML();
                 changeStatistics();
@@ -250,12 +250,13 @@ function changeStatistics(donation) {
         else {
             statsdonationsTotal = obj.DonationsTotal.val()
             statsdonationsTotal = statsdonationsTotal + donation;
-            updates["statistics/DonationsTotal"] = statsdonationsTotal;
 
             statsNumOfDonations = obj.NumOfDonations.val();
             statsNumOfDonations++;
-            updates["statistics/NumOfDonations"] = statsNumOfDonations;
         }
+
+        updates["statistics/NumOfDonations"] = statsNumOfDonations;
+        updates["statistics/DonationsTotal"] = statsdonationsTotal;
 
         db.ref().update(updates);
         firebase.auth().signOut().then(() => {
