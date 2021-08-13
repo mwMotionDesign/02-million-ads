@@ -1,4 +1,4 @@
-// Version 19
+// Version 20
 
 const firebaseConfig = {
     apiKey: "AIzaSyAlyTC44ZMeLmbmJzorOAwSl1eBNACPLwY",
@@ -51,6 +51,9 @@ let arrUser = [];
 const db = firebase.database();
 let lbMail = "";
 let ppUserID = "";
+
+let statsdonationsTotal = 0;
+let statsNumOfDonations = 0;
 
 let updates = {};
 
@@ -142,6 +145,7 @@ function changeFirebase(name, donation, mail, userID, PPuserID) {
                 };
                 donatedTotal = donation;
                 updates["uniqueID/lbID"] = lbID;
+                updates["statistics/Donators"] = lbID;
                 updates["users/" + userID] = userData;
                 changeLeaderboards(name, donation, donatedTotal, lbID);
             }, (e) => {
@@ -224,17 +228,39 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
                 updates['leaderBoard/latest/'] = arrLatest;
                 updates['leaderBoard/alltime/'] = arrAllTime;
                 updates["leaderBoard/Donators"] = arrDonators;
-                db.ref().update(updates);
                 changeInnerHTML();
-                firebase.auth().signOut().then(() => {
-                    console.log("User logged out!");
-                }).catch((e) => {
-                    alert(e);
-                });
+                changeStatistics();
             }, (e) => {
                 alert(e);
             });
         }, (e) => {
+            alert(e);
+        });
+    }, (e) => {
+        alert(e);
+    });
+}
+
+function changeStatistics(donation) {
+    db.ref("statistics").once("value").then((obj) => {
+        if (obj.val() == null) {
+            statsdonationsTotal = donation;
+            statsNumOfDonations = 1;
+        }
+        else {
+            statsdonationsTotal = obj.DonationsTotal.val()
+            statsdonationsTotal = statsdonationsTotal + donation;
+            updates["statistics/DonationsTotal"] = statsdonationsTotal;
+
+            statsNumOfDonations = obj.NumOfDonations.val();
+            statsNumOfDonations++;
+            updates["statistics/NumOfDonations"] = statsNumOfDonations;
+        }
+
+        db.ref().update(updates);
+        firebase.auth().signOut().then(() => {
+            console.log("User logged out!");
+        }).catch((e) => {
             alert(e);
         });
     }, (e) => {
