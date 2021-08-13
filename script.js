@@ -118,7 +118,8 @@ function firebaseLogin(name, donation, mail, PPuserID) {
 }
 
 function changeFirebase(name, donation, mail, userID, PPuserID) {
-    let date = Date.now();
+    let date = new Date();
+    date = date.toUTCString();
     let addDonation = { amount: donation, date: date };
     let userData = [];
     let donatedTotal = 0;
@@ -249,9 +250,6 @@ function changeStatistics(donation) {
             statsNumOfDonations = 1;
         }
         else {
-            console.log(statisticsObj);
-            console.log(statisticsObj.NumOfDonations);
-            console.log(statisticsObj["DonationsTotal"]);
             statsdonationsTotal = statisticsObj.DonationsTotal;
             statsdonationsTotal = statsdonationsTotal + donation;
 
