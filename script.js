@@ -16,7 +16,7 @@ firebase.analytics();
 
 
 const nOfEntriesSaved = 20;
-const nOfEntriesShown = 5;
+const nOfEntriesShown = 10;
 
 const buttonOnce = document.getElementById("buttonDonate");
 const PaymentOverlay = document.getElementById("paymentOverlay");
@@ -324,6 +324,7 @@ function changeInnerHTML() {
         changeDonatorsNames[i].innerHTML = arrDonators[i].name;
         changeDonatorsDonations[i].innerHTML = arrDonators[i].donated;
     }
+    console.log(changeLatestNames.length, changeAllTimeNames.length, changeDonatorsNames.length);
 }
 
 function allChecksClicked() {
