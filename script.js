@@ -251,7 +251,7 @@ function changeStatistics(donation) {
             statsdonationsTotal = obj["DonationsTotal"];
             statsdonationsTotal = statsdonationsTotal + donation;
 
-            statsNumOfDonations = obj.["NumOfDonations"];
+            statsNumOfDonations = obj["NumOfDonations"];
             statsNumOfDonations++;
         }
 
