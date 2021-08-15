@@ -413,7 +413,7 @@ function minimumDonation(e) {
     });
 
     if (minimum == true && checkboxes == true) {
-        PayPalButton.style.display = "flex";
+        PayPalButton.style.display = "block";
     }
     else {
         PayPalButton.style.display = "none";
