@@ -399,13 +399,14 @@ function minimumDonation(e) {
     });
 
     donAmountField.addEventListener("input", e => {
-        console.log(e);
-        parseFloat(e);
-        if (e >= 1) {
+        console.log(e.target.value);
+        let tempDonation = e.target.value;
+        parseFloat(tempDonation);
+        if (tempDonation >= 1) {
             notMinimum.style.display = "none";
             minimum = true;
         }
-        else if (e == "" || e < 1) {
+        else if (tempDonation == "" || tempDonation < 1) {
             notMinimum.style.display = "flex";
             minimum = false;
         }
