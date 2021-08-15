@@ -39,6 +39,7 @@ let checkboxes = false;
 let minimum = false;
 
 const PaymentSuccessMessage = document.getElementById("PaymentSuccessMessage");
+const PaymentSuccessMessageNoLB = document.getElementById("PaymentSuccessMessageNoLB");
 const PaymentCancelMessage = document.getElementById("PaymentCancelMessage");
 const PaymentErrorMessage = document.getElementById("PaymentErrorMessage");
 
@@ -83,7 +84,12 @@ paypal.Buttons({
             donAmountField.value = "";
             lbNameField.value = "";
             PaymentOverlay.style.display = "none";
-            PaymentSuccessMessage.style.display = "flex";
+            if (lbName == "") {
+                PaymentSuccessMessageNoLB.style.display = "flex";
+            }
+            else {
+                PaymentSuccessMessage.style.display = "flex";
+            }
         });
     },
     onCancel: function (data, actions) {
@@ -232,10 +238,12 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
                         arrDonators.pop();
                     }
                 }
-                updates['leaderBoard/latest'] = arrLatest;
-                updates['leaderBoard/alltime'] = arrAllTime;
-                updates["leaderBoard/Donators"] = arrDonators;
-                changeInnerHTML();
+                if (name != "") {
+                    updates['leaderBoard/latest'] = arrLatest;
+                    updates['leaderBoard/alltime'] = arrAllTime;
+                    updates["leaderBoard/Donators"] = arrDonators;
+                    changeInnerHTML();
+                }
                 changeStatistics(name, donation);
             }, (e) => {
                 alert(e);
@@ -266,11 +274,10 @@ function changeStatistics(name, donation) {
             statsNumOfDonations = statisticsObj.NumOfDonations;
             statsNumOfDonations++;
 
+            statsdonationsTotalAnon = statisticsObj.DonationsTotalAnon;
+            statsNumOfDonationsAnon = statisticsObj.NumOfDonationsAnon;
             if (name == "") {
-                statsdonationsTotalAnon = statisticsObj.DonationsTotalAnon;
                 statsdonationsTotalAnon = statsdonationsTotalAnon + donation;
-
-                statsNumOfDonationsAnon = statisticsObj.NumOfDonationsAnon;
                 statsNumOfDonationsAnon++;
             }
         }
@@ -397,7 +404,6 @@ function allChecksClicked() {
 }
 
 function minimumDonation(e) {
-    console.log(e.target.value);
     let tempDonation = e.target.value;
     parseFloat(tempDonation);
     if (tempDonation >= 1) {
