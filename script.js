@@ -370,15 +370,39 @@ function allChecksClicked() {
     if (cbEntrust.checked == true && cbWithdraw.checked == true) {
         notCheckedError.style.display = "none";
         checkboxes = true;
+        isPayPalReady();
 
     }
     else {
         notCheckedError.style.display = "flex";
         checkboxes = false;
+        isPayPalReady();
     }
 }
 
 function minimumDonation(e) {
+    console.log(e.target.value);
+    let tempDonation = e.target.value;
+    parseFloat(tempDonation);
+    if (tempDonation >= 1) {
+        notMinimum.style.display = "none";
+        minimum = true;
+        isPayPalReady();
+    }
+    else if (tempDonation == "" || tempDonation < 1) {
+        notMinimum.style.display = "flex";
+        minimum = false;
+        isPayPalReady();
+    }
+}
+
+function isPayPalReady() {
+    if (minimum == true && checkboxes == true) {
+        PayPalButton.style.display = "block";
+    }
+    else {
+        PayPalButton.style.display = "none";
+    }
 }
 
 (function () {
@@ -398,26 +422,9 @@ function minimumDonation(e) {
         allChecksClicked();
     });
 
-    donAmountField.addEventListener("input", e => {
-        console.log(e.target.value);
-        let tempDonation = e.target.value;
-        parseFloat(tempDonation);
-        if (tempDonation >= 1) {
-            notMinimum.style.display = "none";
-            minimum = true;
-        }
-        else if (tempDonation == "" || tempDonation < 1) {
-            notMinimum.style.display = "flex";
-            minimum = false;
-        }
+    donAmountField.addEventListener("input", event => {
+        minimumDonation(event);
     });
-
-    if (minimum == true && checkboxes == true) {
-        PayPalButton.style.display = "block";
-    }
-    else {
-        PayPalButton.style.display = "none";
-    }
 
     PaymentSuccessMessage.addEventListener("click", event => {
         PaymentSuccessMessage.style.display = "none";
