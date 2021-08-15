@@ -368,7 +368,6 @@ function changeInnerHTML() {
 
 function allChecksClicked() {
     if (cbEntrust.checked == true && cbWithdraw.checked == true) {
-        PayPalButton.style.display = "block";
         notCheckedError.style.display = "none";
         checkboxes = true;
 
@@ -380,14 +379,6 @@ function allChecksClicked() {
 }
 
 function minimumDonation(e) {
-    if (e == "" || e < 1) {
-        notMinimum.style.display = "flex";
-        minimum = true;
-    }
-    else {
-        notMinimum.style.display = "none";
-        minimum = false;
-    }
 }
 
 (function () {
@@ -407,8 +398,15 @@ function minimumDonation(e) {
         allChecksClicked();
     });
 
-    donAmountField.addEventListener("input", event => {
-        minimumDonation(event);
+    donAmountField.addEventListener("input", e => {
+        if (e >= 1) {
+            notMinimum.style.display = "none";
+            minimum = true;
+        }
+        else if (e == "" || e < 1) {
+            notMinimum.style.display = "flex";
+            minimum = false;
+        }
     });
 
     if (minimum == true && checkboxes == true) {
