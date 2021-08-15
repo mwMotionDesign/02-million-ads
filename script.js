@@ -34,6 +34,9 @@ const cbWithdraw = document.getElementById("cbWithdraw");
 const SubmitPayButton = document.getElementById("SubmitPayButton");
 const PayPalButton = document.getElementById("paypal-button-container");
 const notCheckedError = document.getElementById("notCheckedError");
+const notMinimum = document.getElementById("notMinimum");
+let checkboxes = false;
+let minimum = false;
 
 const PaymentSuccessMessage = document.getElementById("PaymentSuccessMessage");
 const PaymentCancelMessage = document.getElementById("PaymentCancelMessage");
@@ -367,10 +370,23 @@ function allChecksClicked() {
     if (cbEntrust.checked == true && cbWithdraw.checked == true) {
         PayPalButton.style.display = "block";
         notCheckedError.style.display = "none";
+        checkboxes = true;
+
     }
     else {
-        PayPalButton.style.display = "none";
         notCheckedError.style.display = "flex";
+        checkboxes = false;
+    }
+}
+
+function minimumDonation(e) {
+    if (e == "" || e < 1) {
+        notMinimum.style.display = "flex";
+        minimum = true;
+    }
+    else {
+        notMinimum.style.display = "none";
+        minimum = false;
     }
 }
 
@@ -390,6 +406,17 @@ function allChecksClicked() {
     cbWithdraw.addEventListener("click", event => {
         allChecksClicked();
     });
+
+    donAmountField.addEventListener("input", event => {
+        minimumDonation(event);
+    });
+
+    if (minimum == true && checkboxes == true) {
+        PayPalButton.style.display = "flex";
+    }
+    else {
+        PayPalButton.style.display = "none";
+    }
 
     PaymentSuccessMessage.addEventListener("click", event => {
         PaymentSuccessMessage.style.display = "none";
