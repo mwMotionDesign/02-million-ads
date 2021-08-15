@@ -452,6 +452,10 @@ function isPayPalReady() {
         PaymentSuccessMessage.style.display = "none";
     });
 
+    PaymentSuccessMessageNoLB.addEventListener("click", event => {
+        PaymentSuccessMessageNoLB.style.display = "none";
+    });
+
     PaymentCancelMessage.addEventListener("click", event => {
         PaymentCancelMessage.style.display = "none";
     });
