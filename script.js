@@ -399,6 +399,8 @@ function minimumDonation(e) {
     });
 
     donAmountField.addEventListener("input", e => {
+        console.log(e);
+        parseFloat(e);
         if (e >= 1) {
             notMinimum.style.display = "none";
             minimum = true;
