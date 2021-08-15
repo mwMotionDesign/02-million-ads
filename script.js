@@ -57,6 +57,8 @@ let ppUserID = "";
 
 let statsdonationsTotal = 0;
 let statsNumOfDonations = 0;
+let statsdonationsTotalAnon = 0;
+let statsNumOfDonationsAnon = 0;
 
 let updates = {};
 
@@ -175,10 +177,10 @@ function changeFirebase(name, donation, mail, userID, PPuserID) {
 function changeLeaderboards(name, donation, donatedTotal, lbID) {
     db.ref("leaderBoard/latest").once("value").then((obj) => {
         arrLatest = [];
-        if (obj.val() == null) {
+        if (obj.val() == null && name != "") {
             arrLatest.unshift({ name: name, donation: donation });
         }
-        else {
+        else if (name != "") {
             arrLatest = obj.val();
             arrLatest.unshift({ name: name, donation: donation });
             if (arrLatest.length > nOfEntriesSaved) {
@@ -187,10 +189,10 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
         }
         db.ref("leaderBoard/alltime").once("value").then((obj) => {
             arrAllTime = [];
-            if (obj.val() == null) {
+            if (obj.val() == null && name != "") {
                 arrAllTime.unshift({ name: name, donation: donation });
             }
-            else {
+            else if (name != "") {
                 arrAllTime = obj.val();
                 arrAllTime.unshift({ name: name, donation: donation });
                 arrAllTime.sort(compareDonation);
@@ -205,10 +207,10 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
                     name: name
                 };
                 let userInList = false;
-                if (obj.val() == null) {
+                if (obj.val() == null && name != "") {
                     arrDonators.unshift(arrUser);
                 }
-                else {
+                else if (name != "") {
                     arrDonators = obj.val();
                     for (let i = 0; i < arrDonators.length; i++) {
                         if (arrDonators[i].lbID == lbID) {
@@ -234,7 +236,7 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
                 updates['leaderBoard/alltime'] = arrAllTime;
                 updates["leaderBoard/Donators"] = arrDonators;
                 changeInnerHTML();
-                changeStatistics(donation);
+                changeStatistics(name, donation);
             }, (e) => {
                 alert(e);
             });
@@ -246,12 +248,16 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
     });
 }
 
-function changeStatistics(donation) {
+function changeStatistics(name, donation) {
     db.ref("statistics").once("value").then((obj) => {
         let statisticsObj = obj.val();
         if (obj.val() == null) {
             statsdonationsTotal = donation;
             statsNumOfDonations = 1;
+            if (name == "") {
+                statsdonationsTotalAnon = donation;
+                statsNumOfDonationsAnon = 1;
+            }
         }
         else {
             statsdonationsTotal = statisticsObj.DonationsTotal;
@@ -259,10 +265,20 @@ function changeStatistics(donation) {
 
             statsNumOfDonations = statisticsObj.NumOfDonations;
             statsNumOfDonations++;
+
+            if (name == "") {
+                statsdonationsTotalAnon = statisticsObj.DonationsTotalAnon;
+                statsdonationsTotalAnon = statsdonationsTotalAnon + donation;
+
+                statsNumOfDonationsAnon = statisticsObj.NumOfDonationsAnon;
+                statsNumOfDonationsAnon++;
+            }
         }
 
         updates["statistics/NumOfDonations"] = statsNumOfDonations;
         updates["statistics/DonationsTotal"] = statsdonationsTotal;
+        updates["statistics/NumOfDonationsAnon"] = statsNumOfDonationsAnon;
+        updates["statistics/DonationsTotalAnon"] = statsdonationsTotalAnon;
 
         db.ref().update(updates);
         firebase.auth().signOut().then(() => {
