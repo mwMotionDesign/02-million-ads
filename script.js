@@ -182,7 +182,7 @@ function changeFirebase(name, donation, mail, userID, PPuserID) {
 
 function changeLeaderboards(name, donation, donatedTotal, lbID) {
     if (name != "") {
-        console.log("name not anonymous");
+        console.log("Create Leaderboard Entry");
         db.ref("leaderBoard/latest").once("value").then((obj) => {
             arrLatest = obj.val();
             if (obj.val() == null) {
@@ -257,7 +257,7 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
         });
     }
     else {
-        console.log("name anonymous");
+        console.log("Anonymous Donation - Prevent Leaderboard Entry");
         changeStatistics(name, donation);
     }
 }
