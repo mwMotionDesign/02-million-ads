@@ -181,80 +181,85 @@ function changeFirebase(name, donation, mail, userID, PPuserID) {
 }
 
 function changeLeaderboards(name, donation, donatedTotal, lbID) {
-    db.ref("leaderBoard/latest").once("value").then((obj) => {
-        arrLatest = obj.val();
-        if (obj.val() == null && name != "") {
-            arrLatest = [];
-            arrLatest.unshift({ name: name, donation: donation });
-        }
-        else if (name != "") {
-            arrLatest.unshift({ name: name, donation: donation });
-            if (arrLatest.length > nOfEntriesSaved) {
-                arrLatest.pop();
-            }
-        }
-        db.ref("leaderBoard/alltime").once("value").then((obj) => {
-            arrAllTime = obj.val();
+    if (name != "") {
+        console.log("name not anonymous");
+        db.ref("leaderBoard/latest").once("value").then((obj) => {
+            arrLatest = obj.val();
             if (obj.val() == null && name != "") {
-                arrAllTime = [];
-                arrAllTime.unshift({ name: name, donation: donation });
+                arrLatest = [];
+                arrLatest.unshift({ name: name, donation: donation });
             }
-            else if (name != "") {
-                arrAllTime.unshift({ name: name, donation: donation });
-                arrAllTime.sort(compareDonation);
-                if (arrAllTime.length > nOfEntriesSaved) {
-                    arrAllTime.pop();
+            else {
+                arrLatest.unshift({ name: name, donation: donation });
+                if (arrLatest.length > nOfEntriesSaved) {
+                    arrLatest.pop();
                 }
             }
-            db.ref("leaderBoard/Donators").once("value").then((obj) => {
-                arrUser = {
-                    lbID: lbID,
-                    donated: donatedTotal,
-                    name: name
-                };
-                let userInList = false;
-                arrDonators = obj.val();
-                if (obj.val() == null && name != "") {
-                    arrDonators = [];
-                    arrDonators.unshift(arrUser);
+            db.ref("leaderBoard/alltime").once("value").then((obj) => {
+                arrAllTime = obj.val();
+                if (obj.val() == null) {
+                    arrAllTime = [];
+                    arrAllTime.unshift({ name: name, donation: donation });
                 }
-                else if (name != "") {
-                    for (let i = 0; i < arrDonators.length; i++) {
-                        if (arrDonators[i].lbID == lbID) {
-                            arrDonators[i].donated = arrUser.donated;
-                            arrDonators[i].name = name;
-                            userInList = true;
-                        }
-                        else {
-                        }
+                else {
+                    arrAllTime.unshift({ name: name, donation: donation });
+                    arrAllTime.sort(compareDonation);
+                    if (arrAllTime.length > nOfEntriesSaved) {
+                        arrAllTime.pop();
                     }
-                    if (userInList == false) {
+                }
+                db.ref("leaderBoard/Donators").once("value").then((obj) => {
+                    arrUser = {
+                        lbID: lbID,
+                        donated: donatedTotal,
+                        name: name
+                    };
+                    let userInList = false;
+                    arrDonators = obj.val();
+                    if (obj.val() == null) {
+                        arrDonators = [];
                         arrDonators.unshift(arrUser);
                     }
                     else {
-                        userInList = false;
+                        for (let i = 0; i < arrDonators.length; i++) {
+                            if (arrDonators[i].lbID == lbID) {
+                                arrDonators[i].donated = arrUser.donated;
+                                arrDonators[i].name = name;
+                                userInList = true;
+                            }
+                            else {
+                            }
+                        }
+                        if (userInList == false) {
+                            arrDonators.unshift(arrUser);
+                        }
+                        else {
+                            userInList = false;
+                        }
+                        arrDonators.sort(compareDonated);
+                        if (arrDonators.length > nOfEntriesSaved) {
+                            arrDonators.pop();
+                        }
                     }
-                    arrDonators.sort(compareDonated);
-                    if (arrDonators.length > nOfEntriesSaved) {
-                        arrDonators.pop();
-                    }
-                }
-                if (name != "") {
                     updates['leaderBoard/latest'] = arrLatest;
                     updates['leaderBoard/alltime'] = arrAllTime;
                     updates["leaderBoard/Donators"] = arrDonators;
                     changeInnerHTML();
-                }
-                changeStatistics(name, donation);
+                    changeStatistics(name, donation);
+                }, (e) => {
+                    alert(e);
+                });
             }, (e) => {
                 alert(e);
             });
         }, (e) => {
             alert(e);
         });
-    }, (e) => {
-        alert(e);
-    });
+    }
+    else {
+        console.log("name anonymous");
+        changeStatistics(name, donation);
+    }
 }
 
 function changeStatistics(name, donation) {
