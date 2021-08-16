@@ -185,7 +185,7 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
         console.log("name not anonymous");
         db.ref("leaderBoard/latest").once("value").then((obj) => {
             arrLatest = obj.val();
-            if (obj.val() == null && name != "") {
+            if (obj.val() == null) {
                 arrLatest = [];
                 arrLatest.unshift({ name: name, donation: donation });
             }
@@ -294,6 +294,8 @@ function changeStatistics(name, donation) {
         updates["statistics/DonationsTotalAnon"] = statsdonationsTotalAnon;
 
         db.ref().update(updates);
+        updates = {};
+
         firebase.auth().signOut().then(() => {
             console.log("User logged out!");
         }).catch((e) => {
