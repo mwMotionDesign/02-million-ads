@@ -182,24 +182,24 @@ function changeFirebase(name, donation, mail, userID, PPuserID) {
 
 function changeLeaderboards(name, donation, donatedTotal, lbID) {
     db.ref("leaderBoard/latest").once("value").then((obj) => {
-        arrLatest = [];
+        arrLatest = obj.val();
         if (obj.val() == null && name != "") {
+            arrLatest = [];
             arrLatest.unshift({ name: name, donation: donation });
         }
         else if (name != "") {
-            arrLatest = obj.val();
             arrLatest.unshift({ name: name, donation: donation });
             if (arrLatest.length > nOfEntriesSaved) {
                 arrLatest.pop();
             }
         }
         db.ref("leaderBoard/alltime").once("value").then((obj) => {
-            arrAllTime = [];
+            arrAllTime = obj.val();
             if (obj.val() == null && name != "") {
+                arrAllTime = [];
                 arrAllTime.unshift({ name: name, donation: donation });
             }
             else if (name != "") {
-                arrAllTime = obj.val();
                 arrAllTime.unshift({ name: name, donation: donation });
                 arrAllTime.sort(compareDonation);
                 if (arrAllTime.length > nOfEntriesSaved) {
@@ -213,11 +213,12 @@ function changeLeaderboards(name, donation, donatedTotal, lbID) {
                     name: name
                 };
                 let userInList = false;
+                arrDonators = obj.val();
                 if (obj.val() == null && name != "") {
+                    arrDonators = [];
                     arrDonators.unshift(arrUser);
                 }
                 else if (name != "") {
-                    arrDonators = obj.val();
                     for (let i = 0; i < arrDonators.length; i++) {
                         if (arrDonators[i].lbID == lbID) {
                             arrDonators[i].donated = arrUser.donated;
