@@ -435,7 +435,7 @@ function shortenString(e) {
         console.log("Name too long: " + tempString.length);
         tempString = tempString.slice(0, -1);
         console.log("Shortended to 10: " + tempString.length);
-        return (tempString);
+        lbNameField.value = tempString;
     }
 }
 
