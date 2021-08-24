@@ -29,6 +29,7 @@ const donAmountField = document.getElementById("DonationAmount");
 let donAmount = 0;
 const lbNameField = document.getElementById("leaderboardName");
 let lbName = "";
+const nameLength = 10;
 const cbEntrust = document.getElementById("cbEntrust");
 const cbWithdraw = document.getElementById("cbWithdraw");
 const SubmitPayButton = document.getElementById("SubmitPayButton");
@@ -426,6 +427,18 @@ function minimumDonation(e) {
     }
 }
 
+function shortenString(e) {
+    let tempString = e.target.value;
+    console.log(tempString)
+
+    if (tempString.length >= nameLength) {
+        console.log("Name too long: " + tempString.length);
+        tempString = tempString.slice(0, -1);
+        console.log("Shortended to 10: " + tempString.length);
+        return (tempString);
+    }
+}
+
 function isPayPalReady() {
     if (minimum == true && checkboxes == true) {
         PayPalButton.style.display = "block";
@@ -450,6 +463,10 @@ function isPayPalReady() {
 
     cbWithdraw.addEventListener("click", event => {
         allChecksClicked();
+    });
+
+    lbNameField.addEventListener("input", event => {
+        shortenString(event);
     });
 
     donAmountField.addEventListener("input", event => {
