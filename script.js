@@ -429,9 +429,12 @@ function minimumDonation(e) {
 
 function shortenString(e) {
     let tempString = e.target.value;
+    let stringsOvershooted = tempString.length - nameLength;
 
     if (tempString.length > nameLength) {
-        tempString = tempString.slice(0, -1);
+        for (i = 0; i < stringsOvershooted; i++) {
+            tempString = tempString.slice(0, -1);
+        }
         lbNameField.value = tempString;
     }
 }
