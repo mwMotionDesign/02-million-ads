@@ -24,6 +24,7 @@ const PaymentOverlay = document.getElementById("paymentOverlay");
 const PaymentClickField = document.getElementById("paymentClickField");
 const reloadLB = document.getElementById("reloadLB");
 const reloadText = document.getElementById("reloadText");
+const reloadTextDots = document.getElementById("reloadTextDots");
 
 const donAmountField = document.getElementById("DonationAmount");
 let donAmount = 0;
@@ -328,6 +329,8 @@ function compareDonated(a, b) {
 }
 
 function loadLeaderboards() {
+    reloadTextDots.style.display = "block";
+
     db.ref("leaderBoard/latest").once("value").then((obj) => {
         if (obj.val() == null) {
             arrLatest = [];
@@ -395,6 +398,7 @@ function changeInnerHTML() {
 
     setTimeout(function () {
         reloadText.style.display = "none";
+        reloadTextDots.style.display = "none";
     }, 1000);
 }
 
